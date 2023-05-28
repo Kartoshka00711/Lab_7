@@ -23,7 +23,27 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
 
     setContent {
+      JetNotesTheme {
+        val coroutineScope = rememberCoroutineScope()
+        val scaffoldState: ScaffoldState = rememberScaffoldState()
 
+        Scaffold(
+          scaffoldState = scaffoldState,
+          drawerContent = {
+            AppDrawer(
+              currentScreen = Screen.Notes,
+              closeDrawerAction = {
+                coroutineScope.launch {
+                  scaffoldState.drawerState.close()
+                }
+              }
+            )
+          },
+          content = {
+            Note()
+          }
+        )
+      }
     }
   }
 }
