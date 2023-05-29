@@ -10,13 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,9 +24,9 @@ import com.topic2.android.notes.theme.NotesTheme
 
 @Composable
 fun TopAppBar(
-    title: String,
-    icon : ImageVector,
-    onIconClick: () -> Unit
+    title: () -> Unit,
+    onIconClick: () -> Unit,
+    navigationIcon: () -> Unit
 ){
     Row(
         modifier = Modifier
@@ -68,8 +66,15 @@ private fun TopAppBarPreview(){
     NotesTheme {
         TopAppBar(
             title = "Заметки",
-            icon = Icons.Filled.List,
-            onIconClick = {}
-        )
+            {}
+        ) {
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Save Note Button",
+                    tint = MaterialTheme.colors.onPrimary
+                )
+            }
+        }
     }
 }
