@@ -1,6 +1,7 @@
 package com.topic2.android.notes.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,66 +21,84 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.topic2.android.notes.domain.model.NoteModel
 import com.topic2.android.notes.theme.rwGreen
 
 @Composable
-fun Note() {
-    val backgroundShape: Shape = RoundedCornerShape(4.dp)
-    Row(
-        modifier = Modifier
-            .padding(8.dp)
-            .shadow(1.dp, backgroundShape)
-            .fillMaxWidth()
-            .heightIn(min = 64.dp)
-            .background(Color.White, backgroundShape)
-    ) {
-        NoteColor(
+fun Note(
+    note: NoteModel,
+    onNoteClick: (NoteModel) -> Unit = {},
+    onNoteCheckedChange: (NoteModel) -> Unit = {}
+) {
+    run {
+        val backgroundShape: Shape = RoundedCornerShape(4.dp)
+        Row(
             modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .padding(start = 16.dp, end = 16.dp),
-            color = rwGreen,
-            size = 40.dp,
-            border = 1.dp
-        )
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .align(Alignment.CenterVertically)
+                .padding(8.dp)
+                .shadow(1.dp, backgroundShape)
+                .fillMaxWidth()
+                .heightIn(min = 64.dp)
+                .background(Color.White, backgroundShape)
+                .clickable(onClick = {onNoteClick(note) } )
         ) {
-            Text(
-                text = "Заголовок",
-                color = Color.Black.copy(alpha = 0.75f),
-                maxLines = 1,
-                style = TextStyle(
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 16.sp,
-                    letterSpacing = 0.15.sp
-                )
+            NoteColor(
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 16.dp, end = 16.dp),
+                color = rwGreen,
+                size = 40.dp,
+                border = 1.dp
             )
-            Text(
-                text = "Содержимое",
-                color = Color.Black.copy(alpha = 0.75f),
-                maxLines = 1,
-                style = TextStyle(
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 14.sp,
-                    letterSpacing = 0.25.sp
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .align(Alignment.CenterVertically)
+            ) {
+                Text(
+                    text = note.title,
+                    color = Color.Black.copy(alpha = 0.75f),
+                    maxLines = 1,
+                    style = TextStyle(
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 16.sp,
+                        letterSpacing = 0.15.sp
+                    )
                 )
-            )
+                Text(
+                    text = note.content,
+                    color = Color.Black.copy(alpha = 0.75f),
+                    maxLines = 1,
+                    style = TextStyle(
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 14.sp,
+                        letterSpacing = 0.25.sp
+                    )
+                )
+            }
+            if (note.isCheckedOff != null) {
+                Checkbox(
+                    checked = note.isCheckedOff,
+                    onCheckedChange = { isChecked ->
+                        val newNote = note.copy(isCheckedOff = isChecked)
+                        onNoteCheckedChange(newNote)
+                    },
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .align(Alignment.CenterVertically)
+                )
+            }
         }
-        Checkbox(
-            checked = false,
-            onCheckedChange = { },
-            modifier = Modifier
-                .padding(start = 8.dp)
-                .align(Alignment.CenterVertically)
-        )
     }
 }
-
-
 @Preview
 @Composable
-fun NotePreview(){
-    Note()
+private fun NotePreview() {
+    Note(
+        note = NoteModel(
+            1,
+            "Заметка 1",
+            "Содержание 1",
+            null
+        )
+    )
 }
