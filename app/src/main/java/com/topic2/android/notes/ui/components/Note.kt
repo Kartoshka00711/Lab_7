@@ -28,7 +28,8 @@ import com.topic2.android.notes.theme.rwGreen
 fun Note(
     note: NoteModel,
     onNoteClick: (NoteModel) -> Unit = {},
-    onNoteCheckedChange: (NoteModel) -> Unit = {}
+    onNoteCheckedChange: (NoteModel) -> Unit = {},
+    isSelected: Boolean
 ) {
     run {
         val backgroundShape: Shape = RoundedCornerShape(4.dp)
@@ -99,6 +100,7 @@ private fun NotePreview() {
             "Заметка 1",
             "Содержание 1",
             null
-        )
+        ),
+        isSelected = isNoteSelected
     )
 }
